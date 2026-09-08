@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.env*
+!.env.example
+*.db
+*.db-shm
+*.db-wal
+backups/
+coverage/
+migration-output/

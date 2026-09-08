@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: hpt
+      POSTGRES_USER: hpt
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hpt -d hpt"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    ports:
+      - "127.0.0.1:5432:5432"
+  app:
+    build: .
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgres://hpt:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}@db:5432/hpt
+      APP_ORIGIN: ${APP_ORIGIN:?Set APP_ORIGIN in .env}
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+volumes:
+  postgres-data:

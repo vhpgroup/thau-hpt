@@ -1,14 +1,27 @@
 # HPT — Quản lý dự án và kho
 
-Kho thiết kế cho phần mềm hợp nhất nghiệp vụ của [hpt-project](https://github.com/vhpgroup/hpt-project) và [quan-ly-kho](https://github.com/vhpgroup/quan-ly-kho).
+Phần mềm hợp nhất nghiệp vụ của [hpt-project](https://github.com/vhpgroup/hpt-project) và [quan-ly-kho](https://github.com/vhpgroup/quan-ly-kho).
 
-**Trạng thái: đã thiết kế logic, chưa có ứng dụng chạy được.** Bộ tài liệu này là đặc tả để triển khai và nghiệm thu, không phải bản đã chuyển dữ liệu hoặc đã triển khai lên máy chủ.
+**Trạng thái: có mã nguồn ứng dụng v0.1 dùng Next.js + PostgreSQL.** Đã triển khai luồng nghiệp vụ chính; chưa deploy lên máy chủ công ty hoặc chuyển dữ liệu thật. Xem [hướng dẫn chạy và phạm vi chính xác](docs/07-chay-phan-mem.md). Các tài liệu thiết kế 01–06 mô tả đích đầy đủ, gồm cả hạng mục chưa triển khai.
 
 ## Mục tiêu
 
 Một phần mềm, một tài khoản đăng nhập, một cơ sở dữ liệu dùng chung. Quản lý xuyên suốt: dự án → gói thầu → kế hoạch hàng → mua/giữ hàng → nhập kho → xuất giao → bàn giao.
 
 Tách rõ **kế hoạch**, **đã mua/nhận**, **tồn thực tế**, **đang giữ**, **đã xuất** và **đã bàn giao**. Việc nhập kho không tự làm dự án hoàn thành.
+
+## Chạy phần mềm
+
+Cài Node.js >=22.13 và PostgreSQL 17, cấu hình `.env.local` theo `.env.example`, rồi chạy:
+
+```bash
+npm ci
+npm run db:migrate
+npm run admin:create
+npm run dev
+```
+
+Không có mật khẩu mặc định. [Hướng dẫn Docker, production và kiểm thử](docs/07-chay-phan-mem.md).
 
 ## Đọc theo thứ tự
 

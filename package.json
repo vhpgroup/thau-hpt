@@ -1,0 +1,31 @@
+{
+  "name": "thau-hpt",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build --webpack",
+    "start": "next start --hostname 0.0.0.0",
+    "db:migrate": "node --env-file-if-exists=.env.local scripts/migrate.js",
+    "admin:create": "node --env-file-if-exists=.env.local scripts/create-admin.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "migration:preview": "node scripts/preview-legacy.js",
+    "test:postgres": "node --test tests/concurrency.js",
+    "format": "prettier --write app components lib scripts tests package.json next.config.mjs compose.yaml"
+  },
+  "dependencies": {
+    "decimal.js": "^10.6.0",
+    "next": "16.3.4",
+    "pg": "^8.16.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "prettier": "^3.6.2"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}
