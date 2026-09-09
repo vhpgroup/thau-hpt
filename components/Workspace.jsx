@@ -1,4 +1,7 @@
 "use client";
+import CatalogManager from "./CatalogManager.jsx";
+import FinanceManager from "./FinanceManager.jsx";
+
 import { useEffect, useRef, useState } from "react";
 import InventoryReport from "./InventoryReport.jsx";
 const fmt = (v) =>
@@ -22,6 +25,7 @@ const roles = {
   warehouse: "Thủ kho",
   project: "Phụ trách dự án",
   viewer: "Chỉ xem",
+  accountant: "Kế toán",
 };
 const types = {
   receipt: "Nhập kho",
@@ -40,7 +44,8 @@ const nav = [
   ["documents", "Chứng từ kho", "⇄"],
   ["handovers", "Bàn giao", "✓"],
   ["counts", "Kiểm kê", "⊞"],
-  ["catalog", "Danh mục", "≡"],
+  ["catalog", "Hàng hóa & kho", "≡"],
+  ["finance", "Công nợ & thu chi", "₫"],
   ["reports", "Báo cáo", "▥"],
   ["settings", "Quản trị", "⚙"],
 ];
@@ -838,81 +843,17 @@ export default function Workspace() {
     );
   if (page === "catalog")
     content = (
-      <>
-        {header(
-          "Danh mục dùng chung",
-          "Một mã hàng được sử dụng xuyên suốt dự án, mua và kho.",
-          worker ? (
-            <>
-              {button("+ Hàng hóa", () => open("product"))}
-              {finance && button("+ Kho", () => open("warehouse"), true)}
-              {button("+ Đối tác", () => open("partner"), true)}
-            </>
-          ) : null,
-        )}
-        <div className="panel">
-          <div className="panel-title">
-            <h3>Hàng hóa</h3>
-            <span>{state.products.length} mã hàng</span>
-          </div>
-          <Table
-            data={filtered(state.products)}
-            columns={[
-              ["code", "Mã hàng"],
-              ["name", "Tên hàng"],
-              ["unit", "ĐVT"],
-              ["model", "Model"],
-              ["maker", "Hãng"],
-              [
-                "serial_tracked",
-                "Quản lý serial",
-                (r) => (r.serial_tracked ? "Có" : "Không"),
-              ],
-            ]}
-          />
-        </div>
-        <div className="split">
-          <div className="panel">
-            <div className="panel-title">
-              <h3>Kho</h3>
-            </div>
-            <Table
-              data={state.warehouses}
-              columns={[
-                ["code", "Mã"],
-                ["name", "Tên kho"],
-                [
-                  "kind",
-                  "Loại",
-                  (r) => (r.kind === "owned" ? "Kho hàng" : "Cách ly"),
-                ],
-              ]}
-            />
-          </div>
-          <div className="panel">
-            <div className="panel-title">
-              <h3>Đối tác</h3>
-            </div>
-            <Table
-              data={filtered(state.partners)}
-              columns={[
-                ["code", "Mã"],
-                ["name", "Đối tác"],
-                [
-                  "kind",
-                  "Vai trò",
-                  (r) =>
-                    ({
-                      supplier: "NCC",
-                      customer: "Khách hàng",
-                      both: "Khách & NCC",
-                    })[r.kind],
-                ],
-              ]}
-            />
-          </div>
-        </div>
-      </>
+      <CatalogManager
+        state={state}
+        act={act}
+        busy={busy}
+        error={error}
+        openLegacy={open}
+      />
+    );
+  if (page === "finance")
+    content = (
+      <FinanceManager state={state} act={act} busy={busy} error={error} />
     );
   if (page === "reports")
     content = (

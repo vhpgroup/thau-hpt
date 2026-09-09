@@ -1,3 +1,4 @@
+import { migrate } from "../lib/migrations.js";
 import { test, after } from "node:test";
 import assert from "node:assert/strict";
 import { randomUUID } from "node:crypto";
@@ -18,9 +19,7 @@ const pool = new pg.Pool({
   options: `-c search_path=${schema}`,
   max: 8,
 });
-await pool.query(
-  await readFile(new URL("../db/001-initial.sql", import.meta.url), "utf8"),
-);
+await migrate(pool);
 const admin = {
   ...(await createUser(pool, {
     username: "admin",
@@ -34,6 +33,72 @@ const admin = {
 let n = 0;
 const run = (action, payload, key = randomUUID()) =>
   command(admin, { action, ...payload }, key, pool);
+test("concurrent settlement requests cannot spend the same payment twice", async () => {
+  const partner = (
+    await run("partner.create", {
+      code: "FIN",
+      name: "Khách công nợ",
+      kind: "customer",
+    })
+  ).id;
+  async function posted(type, code) {
+    const result = await run(`finance.${type}.create`, {
+      code,
+      side: "ar",
+      partner_id: partner,
+      business_date: "2026-09-01",
+      due_date: "2026-09-01",
+      amount: "100",
+      method: "bank",
+      note: "Concurrency test",
+    });
+    await run(`finance.${type}.submit`, { id: result.id, version: 1 });
+    await run(`finance.${type}.post`, { id: result.id, version: 2 });
+    return result;
+  }
+  const payment = await posted("payment", "CASH"),
+    a = await posted("debt", "INV-A"),
+    b = await posted("debt", "INV-B");
+  const allocate = (d) =>
+    run("finance.allocate", {
+      payment_id: payment.id,
+      debt_id: d.id,
+      amount: "80",
+      business_date: "2026-09-01",
+    });
+  const r = await Promise.allSettled([allocate(a), allocate(b)]);
+  assert.equal(r.filter((x) => x.status === "fulfilled").length, 1);
+  assert.equal(
+    (
+      await pool.query(
+        "SELECT SUM(amount) amount FROM settlements WHERE payment_id=$1",
+        [payment.id],
+      )
+    ).rows[0].amount,
+    "80.00",
+  );
+  const key = randomUUID(),
+    payload = {
+      payment_id: payment.id,
+      debt_id: a.id,
+      amount: "20",
+      business_date: "2026-09-01",
+    };
+  const [x, y] = await Promise.all([
+    run("finance.allocate", payload, key),
+    run("finance.allocate", payload, key),
+  ]);
+  assert.equal(x.id, y.id);
+  assert.equal(
+    (
+      await pool.query(
+        "SELECT SUM(amount) amount FROM settlements WHERE payment_id=$1",
+        [payment.id],
+      )
+    ).rows[0].amount,
+    "100.00",
+  );
+});
 after(async () => {
   await pool.end();
   await setup.query(`DROP SCHEMA ${schema} CASCADE`);

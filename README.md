@@ -2,13 +2,21 @@
 
 Phần mềm hợp nhất nghiệp vụ của [hpt-project](https://github.com/vhpgroup/hpt-project) và [quan-ly-kho](https://github.com/vhpgroup/quan-ly-kho).
 
-**Trạng thái: có mã nguồn ứng dụng v0.1 dùng Next.js + PostgreSQL.** Đã triển khai luồng nghiệp vụ chính; chưa deploy lên máy chủ công ty hoặc chuyển dữ liệu thật. Xem [hướng dẫn chạy và phạm vi chính xác](docs/07-chay-phan-mem.md). Các tài liệu thiết kế 01–06 mô tả đích đầy đủ, gồm cả hạng mục chưa triển khai.
+**Trạng thái: có mã nguồn ứng dụng v0.2 dùng Next.js + PostgreSQL.** Đã triển khai luồng nghiệp vụ chính; chưa deploy lên máy chủ công ty hoặc chuyển dữ liệu thật. Xem [hướng dẫn chạy và phạm vi chính xác](docs/07-chay-phan-mem.md). Các tài liệu thiết kế 01–06 mô tả đích đầy đủ, gồm cả hạng mục chưa triển khai.
 
 ## Mục tiêu
 
 Một phần mềm, một tài khoản đăng nhập, một cơ sở dữ liệu dùng chung. Quản lý xuyên suốt: dự án → gói thầu → kế hoạch hàng → mua/giữ hàng → nhập kho → xuất giao → bàn giao.
 
 Tách rõ **kế hoạch**, **đã mua/nhận**, **tồn thực tế**, **đang giữ**, **đã xuất** và **đã bàn giao**. Việc nhập kho không tự làm dự án hoàn thành.
+
+## Bổ sung v0.2
+
+- Quản lý hàng hóa: sửa/ngừng/kích hoạt, nhóm hàng, tồn tối thiểu, chi tiết và Excel.
+- Công nợ phải thu/phải trả: ghi nhận có duyệt, thu chi từng đợt, ứng trước, phân bổ/hoàn tác, giảm nợ, tuổi nợ và xuất Excel.
+- Nâng cấp database bằng `npm run db:migrate`; dữ liệu v0.1 được giữ nguyên.
+
+[Hướng dẫn hàng hóa & công nợ](docs/08-hang-hoa-cong-no.md).
 
 ## Chạy phần mềm
 

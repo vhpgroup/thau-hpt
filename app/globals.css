@@ -766,3 +766,36 @@ code {
   flex: 1;
   min-width: 140px;
 }
+
+.filter-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin: 0 0 22px;
+}
+.filter-row > label {
+  min-width: 180px;
+  flex: 1;
+}
+.detail-metrics {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 22px;
+  border-bottom: 1px solid var(--line);
+}
+.detail-metrics span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.detail-metrics b {
+  color: var(--ink);
+}
+.upload-label {
+  margin: 20px 0;
+}
+.badge.void {
+  background: #fbeaea;
+  color: #a84949;
+}

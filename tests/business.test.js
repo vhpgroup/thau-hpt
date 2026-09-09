@@ -1,3 +1,4 @@
+import { migrate } from "../lib/migrations.js";
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -12,9 +13,7 @@ import { originCheck } from "../lib/http.js";
 let pg, db, admin, manager, warehouse, project;
 before(async () => {
   pg = new PGlite();
-  await pg.exec(
-    await readFile(new URL("../db/001-initial.sql", import.meta.url), "utf8"),
-  );
+  await migrate(pg);
   db = {
     connect: async () => ({
       query: async (sql, params) =>

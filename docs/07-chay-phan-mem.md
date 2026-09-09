@@ -1,4 +1,6 @@
-# Chạy phần mềm v0.1
+# Chạy phần mềm
+
+Bản hiện tại v0.2 bổ sung hàng hóa và công nợ. Xem [hướng dẫn nâng cấp và chức năng v0.2](08-hang-hoa-cong-no.md). Phần dưới mô tả luồng nền tảng v0.1.
 
 ## Trạng thái mã nguồn
 
@@ -87,7 +89,7 @@ Phiếu nháp nhập sai có thể hủy và lập lại. Chưa cung cấp sửa
 
 - Chưa có tệp biên bản đính kèm/in mẫu chứng từ, cấp quyền chi tiết theo kho, hồ sơ nghiệm thu hoặc phụ lục có tệp.
 - Chưa có giao thẳng, đổi hàng theo cặp, hoàn nhập hàng chưa bàn giao hoặc bảo hành hàng khách gửi. Không dùng phiếu trả giảm giao để thay thế các nghiệp vụ này.
-- Chưa có tự động chuyển đổi dữ liệu thật, import Excel nghiệp vụ, chỉnh sửa/ngừng danh mục và sơ đồ quyền tùy biến. Cần đối soát nguồn trước khi viết adapter commit dữ liệu.
+- Chưa có tự động chuyển đổi dữ liệu thật, import Excel chứng từ nghiệp vụ (Excel danh mục đã có ở v0.2), sơ đồ quyền tùy biến. Cần đối soát nguồn trước khi viết adapter commit dữ liệu.
 - Chưa có lịch sao lưu tự động trong ứng dụng. Quản trị hạ tầng phải cấu hình `pg_dump`/backup và kiểm tra khôi phục trước dùng thật.
 - Trạng thái hiện tải snapshot nghiệp vụ chung; phù hợp dữ liệu nội bộ quy mô nhỏ. Chưa phân trang server từng module, audit trên UI chỉ 100 mục mới nhất. Cần phân trang trước khi vận hành khối lượng lớn.
 - Một advisory lock PostgreSQL bảo vệ mọi giao dịch ghi trên nhiều tiến trình; ưu tiên đúng tồn hơn thông lượng. Không bỏ khóa khi chưa thay bằng khóa dòng được kiểm thử cạnh tranh.
